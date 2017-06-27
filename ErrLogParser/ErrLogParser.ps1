@@ -1,7 +1,7 @@
 # Nick (Laurentiu) Alexandrescu
 # Trim the content of log files files in the current folder 
-# and copy them in a new folder called trimmed
-# In trimmed\errors.txt you can find the summary of the errors
+# and copy them in an output folder
+# In _ErrParseOut\errors.txt you can find the summary of the errors
 
 cls
 
@@ -11,25 +11,49 @@ $logExt = (Read-Host "`nWhat is the log file extension?[lst]").tolower().Trim(".
 if ((!$logExt) -or ($logExt.Length -gt 4)) { $logExt = "lst" } 
 
 #Exit if no files with mentioned extension are found in the current folder
-if (!(Test-Path ".\*.$logExt")) { Read-Host "`nNo *.$logExt files in the current folder `n`nPress Any Key..."; Exit}
+if (!(Test-Path ".\*.$logExt")) { Read-Host "`nNo *.$logExt files in the current folder `n`nPress Enter..."; Exit}
+
+#Intializing variables
+$errArr = @()
 
 #Read error strings from the errors.csv file
 try {
-(gc .\error.csv) | Foreach-Object { }
-} catch {"Error Message: "+$_.Exception.Message+" Failed Item: "+$_.Exception.ItemName|Write-Host; Break} 
+    (Get-Content .\errors.csv -ErrorAction Stop) | Foreach-Object {   
+    
+        #If emtpy line or commented line, skip it
+	    if (($_ -match "^\s*$") -or ($_ -match "^(.s)*#.*$")) { return }
+    
+        $errArr += $_.split(",").trim(); 
 
-#Delete old folder if it exists
-if (Test-Path .\_Parsed) { Remove-Item -path .\_Parsed -recurse }
+        Write-Host $errArr
+
+    }
+} catch {
+        Write-Host "Error Message: $_.Exception.Message Failed Item: $_.Exception.ItemName"; 
+        Read-Host "`nNo Error file Present`n`nPress Enter..."
+        Break
+}
+
+#Split file template
+if (Test-Path .\splitTemplate.txt) { 
+    (Get-Content .\splitTemplate.txt) | Foreach-Object {   
+    
+        #If emtpy line or commented line, skip it
+	    if (($_ -match "^\s*$") -or ($_ -match "^(.s)*#.*$")) { return }
+    
+        if (!$beginSplit) { $beginSplit = $_ }
+            else { $endSplit = $_ } 
+    }
+}
+
+   
+#Delete old outup folder if it exists
+if (Test-Path .\_ErrParseOut) { Remove-Item -path .\_ErrParseOut -recurse }
 
 # Creates trimmed folder and errors files
-New-Item -path . -name _Parsed -type directory
-New-Item -path .\_Parsed -name errors_trimmed.txt -type file
-New-Item -path .\_Parsed -name errors_full.txt -type file
-
-# Ask if you want to trim the file names or not
-do {
-    $trimLogName = (Read-Host "`nTrim log file names? Y/[N] >").tolower()
-} while ($trimLogName -ne "y" -and $trimLogName -ne "n" -and $trimLogName -ne "")
+New-Item -path . -name _ErrParseOut -type directory
+New-Item -path .\_ErrParseOut -name errors_trimmed.txt -type file
+New-Item -path .\_ErrParseOut -name errors_full.txt -type file
 
 # Gets all the log files and for each of them ...
 $files = Get-ChildItem .\*.LST

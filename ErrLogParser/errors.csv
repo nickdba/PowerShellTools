@@ -3,8 +3,11 @@
 # Error strings are separated by commas
 # A line represents a set of errors
 
-# Oracle Run Script Errors
-ora-,pls-,sp2-,dbs-,unable,warning,dropped,0 rows updated
+# Oracle Run Script 
+# Errors
+ora-, pls-, sp2-, dbs-, unable, warning
+# Warnings
+dropped, 0 rows updated
 
 # Oracle import Errors 
 # imp-
