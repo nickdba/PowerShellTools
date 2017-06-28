@@ -1,6 +1,6 @@
 # Begin Split
 -- START of deployment scripts
 
-# End Slipt
+# End Split
 -- END of deployment scripts
 
