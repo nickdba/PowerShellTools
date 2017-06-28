@@ -1,7 +1,12 @@
 # Nick (Laurentiu) Alexandrescu
 # Trim the content of log files files in the current folder 
+<<<<<<< HEAD
 # and copy them in an output folder
 # In _ErrParseOut\errors.txt you can find the summary of the errors
+=======
+# and copy them in a new folder called trimmed
+# In trimmed\errors.txt you can find the summary of the errors
+>>>>>>> 50219519c7a2580511540519d13882626761df8d
 
 cls
 
@@ -11,6 +16,7 @@ $logExt = (Read-Host "`nWhat is the log file extension?[lst]").tolower().Trim(".
 if ((!$logExt) -or ($logExt.Length -gt 4)) { $logExt = "lst" } 
 
 #Exit if no files with mentioned extension are found in the current folder
+<<<<<<< HEAD
 if (!(Test-Path ".\*.$logExt")) { Read-Host "`nNo *.$logExt files in the current folder `n`nPress Enter..."; Exit}
 
 #Intializing variables
@@ -54,6 +60,27 @@ if (Test-Path .\_ErrParseOut) { Remove-Item -path .\_ErrParseOut -recurse }
 New-Item -path . -name _ErrParseOut -type directory
 New-Item -path .\_ErrParseOut -name errors_trimmed.txt -type file
 New-Item -path .\_ErrParseOut -name errors_full.txt -type file
+=======
+if (!(Test-Path ".\*.$logExt")) { Read-Host "`nNo *.$logExt files in the current folder `n`nPress Any Key..."; Exit}
+
+#Read error strings from the errors.csv file
+try {
+(gc .\error.csv) | Foreach-Object { }
+} catch {"Error Message: "+$_.Exception.Message+" Failed Item: "+$_.Exception.ItemName|Write-Host; Break} 
+
+#Delete old folder if it exists
+if (Test-Path .\_Parsed) { Remove-Item -path .\_Parsed -recurse }
+
+# Creates trimmed folder and errors files
+New-Item -path . -name _Parsed -type directory
+New-Item -path .\_Parsed -name errors_trimmed.txt -type file
+New-Item -path .\_Parsed -name errors_full.txt -type file
+
+# Ask if you want to trim the file names or not
+do {
+    $trimLogName = (Read-Host "`nTrim log file names? Y/[N] >").tolower()
+} while ($trimLogName -ne "y" -and $trimLogName -ne "n" -and $trimLogName -ne "")
+>>>>>>> 50219519c7a2580511540519d13882626761df8d
 
 # Gets all the log files and for each of them ...
 $files = Get-ChildItem .\*.LST
