@@ -1,28 +1,21 @@
-# Keepass
+# Misc Functions
 
 ## Introduction
 
-Contains various functions for the management of keepass via powershell.
+Contains small functions used to accomplish easy tasks
 
 ## Requirements
 
 | Requirement | Version |
 |-------------|---------|
-| KeePass     | 2.2+    |
 | Powershell  | 4.0+    |
 
 ## How to use
 
-First you will need to setup the environment for KeePass. This prevents you having to enter the master password all the time as it's stored in an encrypted format.
+These are part of PowerShellTools, see readme.md for how to use them in main folder.
+ 
+See get-help Find-OraErr
 
 ```powershell
-    Set-KeepassEnvironment -EnvironmentName "devops" -KeepassDBPath "\\fileshare\database.kdbx" -KeePassMasterPassword "securepassword" -KeePassexePath "C:\Program Files (x86)\KeePass Password Safe 2"
-```
-This will save a file called `KeePassEnvironment.json` under the users profile folder.
-
-Once the environment has been set up it can be used by other functions eg:
-
-```powershell
-    $kenv = Get-KeePassEnvironment
-    Find-KeePassPassword -KeepassEnvironment $kenv -Title "testdatabse01"
+	Find-OraErr [[-Extension] <Object>] [[-OutputFile] <Object>]
 ```
