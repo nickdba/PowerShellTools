@@ -1,23 +1,27 @@
 <#
 .Synopsis
-   Find the Oracle Errors in multimple log files
+   Find Oracle errors in multiple log files
 .DESCRIPTION
-   Find the Oracle Errors in multimple log files
+   Find any of the following Oracle errors in multiple log files
+   ora-|pls-|sp2-|dbs-|unable|warning|dropped|0 rows updated
 .EXAMPLE
    Find-OraErr
+.EXAMPLE
    Find-OraErr -Extension lst
+.EXAMPLE
    Find-OraErr -Extension lst -OutputFile errAll.txt
 #>
 function Find-OraErr {
     [CmdletBinding()]
     [OutputType([String[]])]
-    Param
-    (   # Extension of log files
+    Param (   
+        # Extension of log files
         $Extension = "LST",
         # Entry to find in DB
         $OutputFile = $Null
     )
 
+    # Not found a better alternative to switch between output screen or output file
     if ($OutputFile) { Select-String -Path "*.$Extension" -pattern "ora-|pls-|sp2-|dbs-|unable|warning|dropped|0 rows updated"| out-file $OutputFile }
         else { Select-String -Path "*.$Extension" -pattern "ora-|pls-|sp2-|dbs-|unable|warning|dropped|0 rows updated" }
 
