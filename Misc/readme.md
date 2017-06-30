@@ -19,3 +19,9 @@ See get-help Find-OraErr
 ```powershell
 	Find-OraErr [[-Extension] <Object>] [[-OutputFile] <Object>]
 ```
+
+See get-help Find-String
+
+```powershell
+	Find-String [[-Files] <Object>] [[-SearchString] <Object>]
+```
