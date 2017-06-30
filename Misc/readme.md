@@ -25,3 +25,8 @@ See get-help Find-String
 ```powershell
 	Find-String [[-Files] <Object>] [[-SearchString] <Object>]
 ```
+
+# Aliases
+	Alias fo -> Find-OraErr
+	Alias fs -> Find-String
+	Alias wm -> Write-MasterFile

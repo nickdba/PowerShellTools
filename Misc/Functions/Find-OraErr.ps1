@@ -27,6 +27,6 @@ function Find-OraErr {
 
     # Not found a better alternative to switch between output screen or output file
     if ($OutputFile) { Select-String -Path "*.$Extension" -pattern "ora-|pls-|sp2-|dbs-|unable|warning|dropped|0 rows updated"| out-file $OutputFile }
-        else { Select-String -Path "*.$Extension" -pattern "ora-|pls-|sp2-|dbs-|unable|warning|dropped|0 rows updated" }
+        else { Select-String -Path "*.$Extension" -pattern "ora-|pls-|sp2-|dbs-|unable|warning|dropped|0 rows updated"; Read-Host "Press Enter..." }
 
 }

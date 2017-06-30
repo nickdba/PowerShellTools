@@ -28,4 +28,5 @@ function Find-String {
 	
 	# Get all the files and search the string in them 
 	Get-ChildItem -recurse -Path $Files | Select-String -pattern $SearchString
+	Read-Host "Press Enter..."
 }
