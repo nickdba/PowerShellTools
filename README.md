@@ -13,7 +13,7 @@ Clone the repository on %userprofile%\Documents\WindowsPowerShell\Modules>
 
 Run the following command in powershell
 ```powershell
-	Import-Module PowerShellTools
+	Import-Module -DisableNameChecking -Force PowerShellTools
 ```
 
 See Misc\readme.md for more details on how to use 

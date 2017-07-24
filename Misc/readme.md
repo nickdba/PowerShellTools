@@ -26,6 +26,12 @@ See get-help Find-String
 	Find-String [[-Files] <Object>] [[-SearchString] <Object>]
 ```
 
+See get-help Find-String
+
+```powershell
+	Write-MasterFile [[-Files] <Object>] [[-Prefix] <Object>] [[-Suffix] <Object>] [[-OutFile] <Object>] [[-Replace] <Object>]
+```
+
 # Aliases
 	Alias fo -> Find-OraErr
 	Alias fs -> Find-String

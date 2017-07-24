@@ -37,16 +37,17 @@ function Run-DailyChecksPw {
 		$LogFile = "Logs\log.lst"
 	)
 	
-	Clear-Host
+	# Script parameter cannot be null
+	if (!$Script) { Write-Host "`nScript parameter cannot be null, use 'Get-Help Run-DailyChecksPw' command.`n"; break }
+
+	# PassFile parameter cannot be null
+	if (!$PassFile) { Write-Host "`nPassFile parameter cannot be null, use 'Get-Help Run-DailyChecksPw' command.`n"; break }
 
 	#Delete old log file if it exists
 	if (Test-Path $LogFile) { Remove-Item -path $LogFile}
 
 	# Start spooling to a file
-	Start-Transcript $LogFile -force
-
-	#Read script from 
-	While(!$Script) { $Script = (Read-Host "`r`n`r`nScript to run").Trim() }
+	Start-Transcript $LogFile
 
 	#Read lines from password file; Each line r
 	Get-Content $PassFile | Foreach-Object {
@@ -64,8 +65,8 @@ function Run-DailyChecksPw {
 		$login = $fields[1]+"/"+$fields[2]+"@"+$fields[0]
 		
 		#Execute script in sqlplus
-		$logSql = "$PSScriptRoot\Logs\LogSql.lst"
-		$logErr = "$PSScriptRoot\Logs\LogErr.lst"
+		$logSql = "LogSql.lst"
+		$logErr = "LogErr.lst"
 		Start-Process sqlplus -NoNewWindow -Wait -ArgumentList ($login, ("@"+$Script), "exit") `
 			-RedirectStandardOutput $LogSQL -RedirectStandardError $logErr
 		Get-Content ($logSql,$logErr) | Write-Host
