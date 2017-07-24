@@ -4,7 +4,8 @@
 #
 #.DESCRIPTION
 #A function that runs a script on multiple oracle databases.
-#It is using sqlplus and an input password file for credentials. 
+#It is using sqlplus and credentials from an input file.
+#Reads the passwords from keepas using Find-KeePassPassword from keepass-management module
 #The script needs to have and exit; at the end.
 #
 #.PARAMETER Script
@@ -12,13 +13,13 @@
 #
 #.PARAMETER PassFile
 #CSV file containing user and passwords
-#Database,User,Password
+#User,Password,ConnectAs
 #
 #.PARAMETER LogFile
 #Name of cumulated lof file
 #
 #.EXAMPLE
-#Run-DailyChecksPw -Script "test_script.sql" -PassFile "pass_dev.csv"
+#Run-OracleScript -Script "test_script.sql" -PassFile "pass_dev.csv"
 #
 #.NOTES
 #Regarding the input parameters:
@@ -30,7 +31,7 @@
 #If you connect as sysdba, database field should look like "dbname as sysdba" 
 #Log file will default on the Logs\log.lst
 ################################### 
-function Run-DailyChecksPw {
+function Run-OracleScript {
 	Param (
 		$Script,
 		$PassFile = "pass_dev.csv",
@@ -38,10 +39,10 @@ function Run-DailyChecksPw {
 	)
 	
 	# Script parameter cannot be null
-	if (!$Script) { Write-Host "`nScript parameter cannot be null, use 'Get-Help Run-DailyChecksPw' command.`n"; break }
+	if (!$Script) { Write-Host "`nScript parameter cannot be null, use 'Get-Help Run-OracleScript' command.`n"; break }
 
 	# PassFile parameter cannot be null
-	if (!$PassFile) { Write-Host "`nPassFile parameter cannot be null, use 'Get-Help Run-DailyChecksPw' command.`n"; break }
+	if (!$PassFile) { Write-Host "`nPassFile parameter cannot be null, use 'Get-Help Run-OracleScript' command.`n"; break }
 
 	#Delete old log file if it exists
 	if (Test-Path $LogFile) { Remove-Item -path $LogFile}
