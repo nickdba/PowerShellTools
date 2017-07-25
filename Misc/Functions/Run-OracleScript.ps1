@@ -44,36 +44,53 @@ function Run-OracleScript {
 	# ConnDetailsFile parameter cannot be null
 	if (!$ConnDetailsFile) { Write-Host "`nConnDetailsFile parameter cannot be null, use 'Get-Help Run-OracleScript' command.`n"; break }
 
-	#Delete old log file if it exists
+	# Delete old log file if it exists
 	if (Test-Path $LogFile) { Remove-Item -path $LogFile}
 
 	# Start spooling everything to the log file
 	Start-Transcript $LogFile
 
-	#Read lines from connection details file; Each line represents a database connection
+	# Getting the Keepas key 
+	$kEnvironment = Get-KeePassEnvironment
+	
+	# Logs for SqlPlus
+	$logSql = "LogSql.lst"
+	$logErr = "LogErr.lst"
+    
+	# Read lines from connection details file; Each line represents a database connection
 	Get-Content $ConnDetailsFile | Foreach-Object {
 
-		#If the line is commented out, skip it
+		# If the line is commented out or empty, skip it
 		if (($_.StartsWith("#"))) { return }
+		if (($_ -match '^\s*#+') -or (!$_.trim())) {return}
 
-		#Get connection details
-		$fields = $_.split(",")
+		# Get connection details User,Database,ConnectAs
+		$fields = $_.split(",") | ForEach-Object {$_.trim()}
 
-		#Output details
+		# Output details
 		Write-Host ("`r`nRunning "+$Script+" on " +$fields[1]+"`r`n")
 
+		# Get password from keepass database
+		$password = (Find-KeePassPassword -KeepassEnvironment $kEnvironment -Username $fields[0] -Title $fields[1]).password
+
+		# Connect as sysdba
+		if($fields[2] -eq "as sysdba") { $database = $fields[1]+" "+$fields[2] }
+		else { $database = $fields[1] }
+
+		# Build the connection details string
+		$login = $fields[0]+"/"+$password+"@"+$database
 		
-		#Build the connection details string
-		$login = $fields[0]+"/"+$fields[2]+"@"+$fields[1]
-		
-		#Execute script in sqlplus
-		$logSql = "LogSql.lst"
-		$logErr = "LogErr.lst"
+		# Execute script in sqlplus
 		Start-Process sqlplus -NoNewWindow -Wait -ArgumentList ($login, ("@"+$Script), "exit") `
 			-RedirectStandardOutput $LogSQL -RedirectStandardError $logErr
+		
+		# Write logs for SqlPlus to output
 		Get-Content ($logSql,$logErr) | Write-Host
 	}
 
-	Stop-Transcript
+	# Remove logs for SqlPlus	
 	Remove-Item -path ($logSql,$logErr)
+
+	# End spooling everything to the log file
+	Stop-Transcript
 }
