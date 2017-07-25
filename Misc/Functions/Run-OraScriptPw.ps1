@@ -4,7 +4,7 @@
 #
 #.DESCRIPTION
 #A function that runs a script on multiple oracle databases.
-#It is using sqlplus and an input password file for credentials. 
+#It is using sqlplus and an input Connection Details File for credentials. 
 #The script needs to have and exit; at the end.
 #
 #.PARAMETER Script
@@ -25,8 +25,8 @@
 #Script file needs to contain sql\plsql s=code for oracle.
 #Script needs to finish with an "exit;"" command, otherwise will 
 #just get stuck waiting for an exit.
-#Password file needs to be a csv file in the format below:
-#Database,User,Password
+#Connection details file needs to be a csv file in the format below:
+#User,Password,Database, ConnectAs
 #If you connect as sysdba, database field should look like "dbname as sysdba" 
 #Log file will default on the Logs\log.lst
 ################################### 
@@ -49,7 +49,7 @@ function Run-OraScriptPw {
 	# Start spooling to a file
 	Start-Transcript $LogFile
 
-	#Read lines from password file; Each line r
+	#Read lines from connection details file; Each line represents a credential for a database
 	Get-Content $PassFile | Foreach-Object {
 
 		#If the line is commented out, skip it
