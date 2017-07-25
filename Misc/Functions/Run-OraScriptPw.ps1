@@ -33,7 +33,7 @@
 function Run-OraScriptPw {
 	Param (
 		$Script,
-		$PassFile = "pass_dev.csv",
+		$PassFile,
 		$LogFile = "Logs\log.lst"
 	)
 	

@@ -3,6 +3,7 @@
 #A function that runs a script on multiple databases
 #
 #.DESCRIPTION
+#This is a version of Run-OraScriptPw that uses Find-KeePassPassword to make passwords more secure
 #A function that runs a script on multiple oracle databases.
 #It is using sqlplus and credentials from an input file.
 #Reads the passwords from keepas using Find-KeePassPassword from keepass-management module
@@ -11,7 +12,7 @@
 #.PARAMETER Script
 #Script that needs to be run 
 #
-#.PARAMETER PassFile
+#.PARAMETER UserDbListFile
 #CSV file containing user and passwords
 #User,Password,ConnectAs
 #
@@ -19,7 +20,7 @@
 #Name of cumulated lof file
 #
 #.EXAMPLE
-#Run-OracleScript -Script "test_script.sql" -PassFile "pass_dev.csv"
+#Run-OracleScript -Script "script.sql" -UserDbListFile "user_db.csv" -LogFile "out.log"
 #
 #.NOTES
 #Regarding the input parameters:
@@ -34,15 +35,15 @@
 function Run-OracleScript {
 	Param (
 		$Script,
-		$PassFile = "pass_dev.csv",
+		$UserDbListFile,
 		$LogFile = "Logs\log.lst"
 	)
 	
 	# Script parameter cannot be null
 	if (!$Script) { Write-Host "`nScript parameter cannot be null, use 'Get-Help Run-OracleScript' command.`n"; break }
 
-	# PassFile parameter cannot be null
-	if (!$PassFile) { Write-Host "`nPassFile parameter cannot be null, use 'Get-Help Run-OracleScript' command.`n"; break }
+	# UserDbListFile parameter cannot be null
+	if (!$UserDbListFile) { Write-Host "`nUserDbListFile parameter cannot be null, use 'Get-Help Run-OracleScript' command.`n"; break }
 
 	#Delete old log file if it exists
 	if (Test-Path $LogFile) { Remove-Item -path $LogFile}
@@ -51,7 +52,7 @@ function Run-OracleScript {
 	Start-Transcript $LogFile
 
 	#Read lines from password file; Each line r
-	Get-Content $PassFile | Foreach-Object {
+	Get-Content $UserDbListFile | Foreach-Object {
 
 		#If the line is commented out, skip it
 		if (($_.StartsWith("#"))) { return }
