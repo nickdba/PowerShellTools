@@ -3,7 +3,7 @@
 #A function that runs a script on multiple databases
 #
 #.DESCRIPTION
-#This function is a version of Run-OraScriptPw that uses Find-KeePassPassword to make passwords more secure
+#This function is a version of Push-OraScriptPw that uses Find-KeePassPassword to make passwords more secure
 #The purpose is to run a script on multiple oracle databases.
 #It is using sqlplus to connect to the database and credentials from an input file.
 #Reads the passwords from keepas using Find-KeePassPassword from keepass-management module
@@ -19,7 +19,7 @@
 #Name of cumulated log file
 #
 #.EXAMPLE
-#Run-OracleScript -Script "script.sql" -ConnDetailsFile "conn_details.csv" -LogFile "out.log"
+#Push-OracleScript -Script "script.sql" -ConnDetailsFile "conn_details.csv" -LogFile "out.log"
 #
 #.NOTES
 #Regarding the input parameters:
@@ -31,7 +31,7 @@
 #If you connect as sysdba, ConnectAs field should say "as sysdba", otherwise can be ignored 
 #Log file will default on the Logs\log.lst
 ################################### 
-function Run-OracleScript {
+function Push-OracleScript {
 	Param (
 		$Script,
 		$ConnDetailsFile,
@@ -39,10 +39,10 @@ function Run-OracleScript {
 	)
 	
 	# Script parameter cannot be null
-	if (!$Script) { Write-Host "`nScript parameter cannot be null, use 'Get-Help Run-OracleScript' command.`n"; break }
+	if (!$Script) { Write-Host "`nScript parameter cannot be null, use 'Get-Help Push-OracleScript' command.`n"; break }
 
 	# ConnDetailsFile parameter cannot be null
-	if (!$ConnDetailsFile) { Write-Host "`nConnDetailsFile parameter cannot be null, use 'Get-Help Run-OracleScript' command.`n"; break }
+	if (!$ConnDetailsFile) { Write-Host "`nConnDetailsFile parameter cannot be null, use 'Get-Help Push-OracleScript' command.`n"; break }
 
 	# Delete old log file if it exists
 	if (Test-Path $LogFile) { Remove-Item -path $LogFile}

@@ -18,7 +18,7 @@
 #Name of cumulated lof file
 #
 #.EXAMPLE
-#Run-OraScriptPw -Script "test_script.sql" -PassFile "pass_dev.csv"
+#Push-OraScriptPw -Script "test_script.sql" -PassFile "pass_dev.csv"
 #
 #.NOTES
 #Regarding the input parameters:
@@ -30,7 +30,7 @@
 #If you connect as sysdba, database field should look like "dbname as sysdba" 
 #Log file will default on the Logs\log.lst
 ################################### 
-function Run-OraScriptPw {
+function Push-OraScriptPw {
 	Param (
 		$Script,
 		$PassFile,
@@ -38,10 +38,10 @@ function Run-OraScriptPw {
 	)
 	
 	# Script parameter cannot be null
-	if (!$Script) { Write-Host "`nScript parameter cannot be null, use 'Get-Help Run-OraScriptPw' command.`n"; break }
+	if (!$Script) { Write-Host "`nScript parameter cannot be null, use 'Get-Help Push-OraScriptPw' command.`n"; break }
 
 	# PassFile parameter cannot be null
-	if (!$PassFile) { Write-Host "`nPassFile parameter cannot be null, use 'Get-Help Run-OraScriptPw' command.`n"; break }
+	if (!$PassFile) { Write-Host "`nPassFile parameter cannot be null, use 'Get-Help Push-OraScriptPw' command.`n"; break }
 
 	#Delete old log file if it exists
 	if (Test-Path $LogFile) { Remove-Item -path $LogFile}
