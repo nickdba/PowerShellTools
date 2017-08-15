@@ -30,8 +30,11 @@
 ##############################
 function Find-String {
 	Param (
-		[ValidatePattern("\w+")] [String] $Files = "*.*",
-        [String] $SearchString = $Null
+		[ValidatePattern("\w+")] 
+		[String] $Files = "*.*",
+		
+		[Parameter(Mandatory=$true)]
+		[String] $SearchString
 	)
 	
 	# Get all the files and search the string in them 
