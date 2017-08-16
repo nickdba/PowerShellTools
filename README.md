@@ -1,4 +1,9 @@
 # PowerShellTools
+
+Open Source Project - Ended
+
+Moved to Private
+
 Some tools that I wrote in PowerShell to make my life easier
 
 ## Requirements
